@@ -10,16 +10,16 @@
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="style6_2_sam.css" type="text/css" >
 </head>
-    
-<body> 
-    
+
+<body>
+
     <div id="title" class="container cp_bgpattern02">
         <h1>NOKワード</h1>
         <!--div id="timer"><h2></h2></div-->
     </div>
-    
-    
-        
+
+
+
         <div class="wrapper">
             <div class="aboutGame">
                 <span class="aboutGametitle">〜ゲーム概要〜</span>
@@ -62,13 +62,13 @@
                 <div id="chatLogs"></div>
             </div>
         </div>
-        
-    
-    
-    
+
+
+
+
     <script type="text/javascript">
         //console.log("v5のHTML");
-        
+
         var socket = io.connect(); // C02. ソケットへの接続
         var start = 0;
         var name = '';
@@ -76,12 +76,12 @@
         var pointword = '';
         var ngword = '';
         let group = [];
-        
+
         var aTimeLimit = 0;//全体の制限時間
         var getTimeLimit = 0;//制限時間
         var getTimeStart = 0;//開始時間
         var gTimer = 0;//タイマー
-        
+
         var message_time = 0;
         var message_min = 0;
         var ms_time = 0;
@@ -89,12 +89,12 @@
         var now_min = 0;
         var n_time = 0;
         var diff_min = 0;
-        
+
         var timetime = 0;
-        
+
         let point_log = [];
         let otherids = [];
-        
+
         // C04. server_to_clientイベント・データを受信する
         //人がいない時のメッセージ表示
         socket.on("start_server_to_client", function(data){
@@ -115,8 +115,8 @@
         function appendStaMsg(text) {
             $("#chatLogs").prepend("<div class='balloon_message_sta'>" + text + "</div>");
         }
-        
-        
+
+
         // メッセージ表示の部分
         socket.on("server_to_client", function(data){
             console.log(data);
@@ -148,32 +148,32 @@
         function appendMsg(text) {
             $("#chatLogs").prepend("<div class='balloon_message'>" + text + "</div>");
         }
-        
+
         ////////////未解読
         $("form").submit(function(e){//formでボタンが押されたら　.val()はvalue属性を取得、変更
             e.preventDefault();
         });
         ////////////
-        
+
         ////////////id="sendButton"(「送信」「入室」)が実行されたときの処理
         $("#sendButton").on('click',function(){
             console.log("start=" + start);
-            
+
             var message = $("#msgForm").val();//26:inputでとった入力テキストをvalueでmassageに取得
-            $("#msgForm").val('');//入力テキストボックスの中を初期化みたいな    
-            
+            $("#msgForm").val('');//入力テキストボックスの中を初期化みたいな
+
             if (start == 2) {//isEnterがtrueなら入る
                 console.log("isEnter = true");
-                
+
                 // C03. client_to_serverイベント・データを送信する
                 socket.emit("client_to_server", {value: 'chat log', name : name, message: message});
-                
+
                 message_time = new Date();
                 console.log("message_time = " + message_time);
                 ms_time = message_time.getTime();
                 console.log("ms_time = " + ms_time);
                 message_min  = message_time.getMinutes();
-                
+
                 ////////////POINTワードの判定
                 var pointjudge = 0;
                 pointjudge = message.indexOf(pointword);
@@ -184,29 +184,29 @@
                     point_log.push(pointword_log);
                 }
                 ////////////
-                
+
                 ////////////ガヤ
                 socket.emit("gayaMessage", {name : name, word : ngword, message : message});
-                
+
                 ////////////
-                
+
                 ////////////形態素解析
                 socket.emit("mecab_one",{name : name, word : ngword, group : group, message : message});
                 ////////////
-            } 
-            
+            }
+
             ////////////POINTワード入力・保存
             else if(start == 1){
                 pointword = message;
-                
+
                 var pointwordMessage = "【 " + pointword + " 】";
                 console.log(pointwordMessage);
                 $("#point_word").append("<div>" + pointwordMessage + "</div>");//id=point_wordにpointwordMessage = "あなたのPOINTワードは『pointword』です"を追加
                 changeLabel_2();//メッセージと送信に変更
-                
+
                 start = 2;
                 console.log("else if start=" + start);
-                
+
                 ////////////ゲーム全体の制限時間
                 aTimeLimit = 5 * 60 * 1000;   // 分をミリ秒に変換
                 console.log("aTimeLimit = " + aTimeLimit);
@@ -218,7 +218,7 @@
                 ////////////
             }
             ////////////
-            
+
             ////////////最初の入室時
             else {
                 name = message;
@@ -228,34 +228,34 @@
                  // C06. client_to_server_personalイベント・データを送信する
                 socket.emit("client_to_server_personal", {value : name});
                 changeLabel_1();//POINTワードと送信に変更
-                
+
                 // 言語配布スイッチ
                 socket.emit("distribute_word",{value : name});
                 console.log("Distribute Word");
-                
+
                 //途中から入ったときに他プレイヤのNGワードをもらう
-                socket.emit("1",{value : name});
-                
+                //socket.emit("1",{value : name});
+
                 start = 1;
                 console.log("else start=" + start);
             }
             ////////////
-            
+
         });
-        
+
         function changeLabel_1() {
             $("label").text("POINTワード：");
             $("#sendButton").text("送信");
             console.log("2start=" + start);
         }
-        
+
         function changeLabel_2() {
             $("label").text("メッセージ：");
             $("#sendButton").text("送信");
             console.log("1start=" + start);
         }
         ////////////
-        
+
         ////////////ゲーム終了のアラート画面　
         var alertimsg = function(){
             var msg = "[" + name + "]さんのポイントは" + point + "点です";
@@ -263,23 +263,23 @@
             console.log(point_log);
             var alert_msg = "10分経過　あなたのポイントは" + point + "点です▶︎" + point_log;
             alert(alert_msg);
-            
+
             console.log("1："+ msg);
             socket.emit("client_to_server_alert", {value : msg});
-            
+
             var CLEAR_LINK = 'http://' + location.host + '/clear';
             console.log(CLEAR_LINK);
             socket.disconnect();
             location.href = CLEAR_LINK;
         }
         ////////////
-        
+
         ////////////会話間の制限時間
         var count_sec = 0;
         function count_zero(){
             count_sec = 0;
         }
-        
+
         function showClock1() {
             var remainingTime = aTimeLimit - (count_sec++ * 1000);
             var remainingMin = remainingTime/60000;
@@ -290,7 +290,7 @@
         setInterval('showClock1()',1000);
         //////今のままだと終わる時間とアラート時間がずれてる。setaintervalをpointワード入力してからカウントされて欲しい！！
         ////////////
-        
+
         ////////////NGワードの受信・保存
         socket.on("ngword_display", function(data){
             //other_ngdata = "[name]さんのNGワードは「NGword」です"
@@ -302,15 +302,19 @@
                 otherids.push(other_id);
             }
         });
-        
+
         socket.on("ngword_save",function(data){//NGワードの保存
             ngword = data.word;
             group = data.group;
+
+            //途中から入ったときに他プレイヤのNGワードをもらう
+            socket.emit("1",{value : name});
+            
             console.log("group: " + group);
             //socket.emit("ngword_groups",{value : ngword});
         });
         ////////////
-        
+
         ////////////途中から入ったときに他プレイヤのNGワードの受信・保存
         socket.on("2",function(data){
             var id = data.value;
@@ -331,8 +335,8 @@
             socket.emit("6",{name : name, word : ngword});
         });
         ////////////
-        
-        
+
+
         ////////////チャレンジボタン　自分のNGワードを当てる
         //「釣り」の場合、「釣り」も「釣りざお」も成功と判定する仕様になっている
         //これを解決するなら、メッセージから名詞を取り出すようにしなきゃいけない
@@ -359,7 +363,7 @@
                 var challout_log = "[ NGワードチャレンジ失敗：-3点 ]";
                 point_log.push(challout_log);
             };
-            
+
             //console.log("Challenge Button: Clicked.");
             console.log(challenge_message);
             socket.emit("challenge_btn_click",{value: 'chat log', name : name, message: challenge_message});
@@ -382,7 +386,7 @@
             //$("#chatLogs").prepend("<font color='#0000cd'>"+"<div class='balloon_message_rst'>"+"<h2>"+ text +"</h2>"+"</div>"+"</font>");
         }
         ////////////
-        
+
         ////////////アッタクボタン　特定の誰かのPOINTワードを当てる
         $("#attack_btn").on('click', function(){
             var attack_message = $("#msgForm").val();
@@ -391,14 +395,14 @@
             //socket.emit("challenge_btn_click",{value: 'chat log', name : name, message: attack_msg});
             socket.emit("attack_btn_click",{value: 'chat log', name: name, message:attack_message});
         });
-        
+
         socket.on("attack_check",function(data){
             var result;
             var result_name;
             var result_text;
             var attacker = data.name;
             var attack_check_message = data.message;//例 date.message =「aさんのAワード」
-            
+
             result_name = attack_check_message.indexOf(name);
             console.log("attack_result_name=" + result_name + "//「aさんのAワード」のaさんであるかどうか");
             if(result_name != -1){
@@ -409,10 +413,10 @@
                     console.log(result_text + "attackされた−２");
                     point = point -5;//減点
                     console.log("point = " + point);
-                    
+
                     var attrec_log = "[ POINTワードされた：-5点 ]";
                     point_log.push(attrec_log);
-                    
+
                     socket.emit("attack_result",{value:'chat log',name: attacker, message:result_text});
                 };
                 if(result == -1){
@@ -425,7 +429,7 @@
                 console.log("アッタク相手は別の人");
             };
         });
-            
+
         socket.on("attack_result_send",function(data){
             var result;
             console.log("attack_result_send_attaker = " + data.name);
@@ -436,7 +440,7 @@
                     point = point + 5;//加点
                     console.log("point = " + point);
                     console.log("攻撃後アタック成功");
-                    
+
                     var attsuc_log = "[ POINTワード成功：+5点 ]";
                     point_log.push(attsuc_log);
                 };
@@ -444,7 +448,7 @@
                     point = point - 5;//減点
                     console.log("point = " + point);
                     console.log("攻撃後アタック失敗");
-                    
+
                     var attout_log = "[ POINTワード失敗：-5点 ]";
                     point_log.push(attout_log);
                 };
@@ -455,48 +459,48 @@
             $("#chatLogs").prepend("<div class='balloon_message_att'>"+ text +"</div>");
         }
         ////////////
-        
+
         ////////////チェンジボタン　NG・POINTワード変更
         $("#change_btn").on('click', function(){
             //var change_message = $("#msgForm").val();
             //$("#msgForm").val('');
             point = point -2;
             console.log("point = " + point);
-            
+
             var chan_log = "[ POINTワード失敗：-2点 ]";
             point_log.push(chan_log);
-            
+
             //ok_count=0;
             changeLabel_1();//POINTワードと送信に変更
             console.log("changeLabel_1");
             socket.emit("word_change",);
         });
-        
+
         //POINTワードの変更
         socket.on("pointword_change",function(data){
             //changeLabel_1();//POINTワードと送信に変更
             //var start = data.value;
             console.log("pointchange_start = " + data.value);
-            
+
             pointword = $("#msgForm").val();
             $("#msgForm").val('');
-            
+
             var pointwordMessage = "チェンジ ▶︎【 " + pointword + " 】";
             console.log(pointwordMessage);
             $("#point_word").append("<div>" + pointwordMessage + "</div>");//id=point_wordにpointwordMessage = "あなたのPOINTワードは『pointword』にチェンジしました"を追加
             changeLabel_2();//メッセージと送信に変更
         });
         ////////////
-        
+
         ////////////ガヤのお知らせ
         let cos = [];
         var cosdata = -2;
         var cos_result = -1;
-        
+
         socket.on("groupMessage_two",function(data){
             var cosre = data.value;
             console.log("twoに入った : " + cosre);
-            
+
             if(cosre >= 0.65 && cosre <= 0.75){
                 var gaya_remessage = name + "さんNGワード、ちょっとおしい！";
                 console.log(gaya_remessage);
@@ -517,12 +521,12 @@
                 cos_result = -1;
             }
         });
-        
+
         ////////////NGワードの判定
         socket.on("ng_deduction",function(data){
             ngwordOut(data);
         });
-        
+
         function ngwordOut(data){
             point = point -2;
             console.log("point = " + point);
@@ -538,7 +542,7 @@
             $("#chatLogs").prepend("<div class='balloon_icon_gaya'>" + face + "</div>" +"<div class='balloon_message_gaya'>"+ text + "</div>");
         }
         ////////////
-        
+
     </script>
 </body>
 </html>
