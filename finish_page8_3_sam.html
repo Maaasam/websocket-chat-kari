@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>websocket-chat</title>
+    <link rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- C01. Socket.IOクライアントライブラリの読み込み -->
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="style6_2_sam.css" type="text/css" >
+</head>
+    
+<body> 
+    
+    
+    
+    <div id="title" class="container2 cp_bgpattern02">
+        <h1>ゲーム終了</h1>
+        <div  id="alertMsg"></div>
+        <br><br>
+    </div>
+    
+    <!--div class="user_i">
+        <form class="form-result">
+            <button　type="submit" class="btn btn-finish" id="resultButton">結果を見る</button>
+        </form>
+    </div-->
+    
+        
+    <div class="position_finish">
+        <a href="front_page_v8_3_sam.html"><button  class="finishbtn" id="link_btn">最初の画面に戻る</button></a>
+        <!--a href="index3_ver4.html"　class="btn-finish">最初の画面に戻る</a-->
+    </div>
+    
+    
+    <script type="text/javascript">
+        console.log("finish_page8_3_sam.html");
+        
+        /*
+        $("#resultButton").on('click',function(){
+            console.log("resultButton");
+            var data = 0;
+            socket.emit("client_to_server_result",{value:data});
+        });
+        
+        socket.on("server_to_client_result",function(data){
+            console.log("server_to_client_result");
+            var result_message = data.value;
+            console.log(result_message);
+        });
+        */
+        /*
+        socket.on("server_to_client_alert",function(data){
+            console.log("3"+ data.value);
+            appendAlertMsg(data.value);
+        });
+        function appendAlertMsg(text){
+            $("#alertMsg").prepend("<div>" + text + "</div>");
+        }*/
+    
+    </script>
+    
+</body>
+</html>
