@@ -1,7 +1,7 @@
 {
-  "name": "websocket-chat",
+  "name": "websocket-chat-full",
   "version": "1.0.0",
-  "main": "server_side_v8_3.js",
+  "main": "server_side_v8_3_sam.js",
   "dependencies": {
     "bitcore-lib-cash": "^8.20.5",
     "http-status-codes": "^1.4.0",
@@ -16,7 +16,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server_side_v8_3.js"
+    "start": "node server_side_v8_3_sam.js"
   },
   "author": "",
   "license": "ISC",
