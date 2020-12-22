@@ -1,0 +1,25 @@
+{
+  "name": "websocket-chat",
+  "version": "1.0.0",
+  "main": "server_side_v8_3.js",
+  "dependencies": {
+    "bitcore-lib-cash": "^8.20.5",
+    "http-status-codes": "^1.4.0",
+    "mysql": "^2.18.1",
+    "node-word2vec": "0.0.8",
+    "pg": "^8.3.0",
+    "python-shell": "^2.0.3",
+    "react": "^16.13.1",
+    "socket.io": "^2.3.0",
+    "sqlite3": "^5.0.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server_side_v8_3.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "description": ""
+}
